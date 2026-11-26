@@ -1,0 +1,20 @@
+# Build outputs
+/build/
+/dist/
+/tmp/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local tooling
+.env
+.env.*
