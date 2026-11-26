@@ -30,6 +30,30 @@ Build a small Neo6502 demo that:
 - **Layout spike:** confirm whether graphics and readable room text can coexist cleanly on the same screen.
 - **Asset pipeline:** build reproducible tooling to convert master art into Neo graphics assets and room data.
 
+## Build
+
+Requires `ca65`/`ld65` (cc65) and `python3`.
+
+```sh
+make
+```
+
+Outputs:
+
+- `build/vignette.bin`
+- `dist/vignette.neo`
+
 ## Status
 
-Project scaffolding created. Next step: M0 rendering spike on Neo6502.
+MVP skeleton built and compiling.
+
+- [x] Project scaffolding
+- [x] Neo6502 API helpers
+- [x] Room data + primitive scene renderer
+- [x] Keyboard navigation loop
+- [x] `.neo` packer and Makefile
+- [ ] Runtime validation on Neo6502 emulator/hardware
+- [ ] Replace primitive scenes with tile/graphics assets
+- [ ] Asset pipeline and content pass
+
+See [docs/mvp.md](docs/mvp.md) and [docs/rendering-spike.md](docs/rendering-spike.md).
