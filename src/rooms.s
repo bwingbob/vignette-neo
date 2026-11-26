@@ -57,19 +57,19 @@ SCENE_LIVING = 5
 
 ; Length-prefixed strings
 name_west:    .byte 13, "West of House"
-desc_west:    .byte 38, "You stand by a white house. A path leads N."
+desc_west:    .byte 43, "You stand by a white house. A path leads N."
 name_north:   .byte 14, "North of House"
-desc_north:   .byte 37, "The north side of the house faces a forest."
+desc_north:   .byte 43, "The north side of the house faces a forest."
 name_east:    .byte 13, "East of House"
-desc_east:    .byte 39, "A narrow path runs behind the white house."
+desc_east:    .byte 42, "A narrow path runs behind the white house."
 name_behind:  .byte 12, "Behind House"
-desc_behind:  .byte 39, "A small window is slightly ajar here. E/W."
+desc_behind:  .byte 42, "A small window is slightly ajar here. E/W."
 name_kitchen: .byte 7,  "Kitchen"
-desc_kitchen: .byte 36, "A plain kitchen with a table and sack."
+desc_kitchen: .byte 38, "A plain kitchen with a table and sack."
 name_living:  .byte 11, "Living Room"
-desc_living:  .byte 37, "A rug lies before a wooden trophy case."
+desc_living:  .byte 39, "A rug lies before a wooden trophy case."
 
-help_text:    .byte 33, "Keys: N/S/E/W move, L look, Q quit"
+help_text:    .byte 34, "Keys: N/S/E/W move, L look, Q quit"
 prompt_text:  .byte 2, "> "
 
         .code
@@ -230,19 +230,50 @@ no_move:
 ; draw_text_at
 ;   text_ptr = pointer to length-prefixed string
 ;   A = x char col, X = y char row
+;   Converts char cell to pixel coords (6x8 font cell).
+;   Draws with solid fill off so text background is transparent.
 .proc draw_text_at
+        ; Save col/row and compute pixel coords into ptr0/tmp first.
+        stx ptr0+1          ; save row
+        asl                 ; col*2
+        sta ptr0
+        asl                 ; col*4
+        clc
+        adc ptr0            ; col*6 = pixel x
+        pha                 ; save pixel x
+
+        ; Solid off for transparent text background
+        lda #0
         sta NEO_PARAM0
+        lda #NEO_GRP_GRAPH
+        ldx #NEO_FN_GFX_SET_SOLID
+        jsr neo_call
+
+        ; Set text params
+        pla
+        sta NEO_PARAM0      ; pixel x lo
         lda #0
-        sta NEO_PARAM1
-        stx NEO_PARAM2
+        sta NEO_PARAM1      ; pixel x hi
+        lda ptr0+1
+        asl
+        asl
+        asl                 ; row*8
+        sta NEO_PARAM2      ; pixel y lo
         lda #0
-        sta NEO_PARAM3
+        sta NEO_PARAM3      ; pixel y hi
         lda text_ptr
         sta NEO_PARAM4
         lda text_ptr+1
         sta NEO_PARAM5
         lda #NEO_GRP_GRAPH
         ldx #NEO_FN_GFX_TEXT
+        jsr neo_call
+
+        ; Restore solid fill for rectangles
+        lda #1
+        sta NEO_PARAM0
+        lda #NEO_GRP_GRAPH
+        ldx #NEO_FN_GFX_SET_SOLID
         jsr neo_call
         rts
 .endproc

@@ -47,6 +47,18 @@ gfx_init:
         ldx #NEO_FN_GFX_DEFAULTS
         jsr neo_call
 
+        ; Set draw size/solid for text/images
+        lda #1
+        sta NEO_PARAM0
+        lda #NEO_GRP_GRAPH
+        ldx #NEO_FN_GFX_SET_SIZE
+        jsr neo_call
+        lda #1
+        sta NEO_PARAM0
+        lda #NEO_GRP_GRAPH
+        ldx #NEO_FN_GFX_SET_SOLID
+        jsr neo_call
+
         ; Clear full screen to black
         lda #COLOR_BLACK
         sta NEO_PARAM0

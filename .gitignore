@@ -24,3 +24,5 @@ __pycache__/
 # External dependencies (local only)
 /neo6502-firmware/
 
+
+memory.dump
