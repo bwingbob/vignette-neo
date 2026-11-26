@@ -18,3 +18,7 @@ __pycache__/
 # Local tooling
 .env
 .env.*
+
+# External dependencies (local only)
+/neo6502-firmware/
+
